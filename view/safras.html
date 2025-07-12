@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safras - Fazenda Silva</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #2d5a3d;
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: #2d5a3d;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            background: #2d5a3d;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            padding: 30px 20px;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.hidden {
+            transform: translateX(-100%);
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-circle {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logo-subtitle {
+            font-size: 14px;
+            opacity: 0.8;
+            text-align: center;
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .nav-item {
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-align: center;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item.active {
+            background: white;
+            color: #2d5a3d;
+            font-weight: 600;
+        }
+
+        .weather {
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .weather-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            background: white;
+            border-radius: 20px 0 0 20px;
+            padding: 30px;
+            margin-left: 240px;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .page-title {
+            font-size: clamp(24px, 4vw, 32px);
+            font-weight: bold;
+            color: #333;
+        }
+
+        .year-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: clamp(24px, 4vw, 32px);
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .divider {
+            width: 2px;
+            height: 40px;
+            background: #ddd;
+        }
+
+        .new-harvest-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .new-harvest-btn:hover {
+            background: #c82333;
+        }
+
+        /* Table */
+        .table-container {
+            background: #f8f9fa;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-header {
+            background: #2d5a3d;
+            color: white;
+        }
+
+        .table-header th {
+            padding: 20px 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .table-body tr {
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .table-body tr:last-child {
+            border-bottom: none;
+        }
+
+        .table-body td {
+            padding: 20px 15px;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .table-body tr:hover {
+            background: #f1f3f4;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            min-width: 120px;
+            display: inline-block;
+        }
+
+        .status-concluida {
+            background: #28a745;
+            color: white;
+        }
+
+        .status-andamento {
+            background: #6c757d;
+            color: white;
+        }
+
+        .status-encerrada {
+            background: #dc3545;
+            color: white;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            font-size: 16px;
+        }
+
+        .action-btn:hover {
+            background: #e9ecef;
+        }
+
+        .edit-btn {
+            color: #007bff;
+        }
+
+        .delete-btn {
+            color: #dc3545;
+        }
+
+        /* Summary Cards */
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .summary-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .summary-value {
+            font-size: 48px;
+            font-weight: bold;
+            color: #2d5a3d;
+            margin-bottom: 10px;
+        }
+
+        .summary-label {
+            font-size: 16px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* Overlay for mobile menu */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                border-radius: 0;
+                padding: 80px 20px 20px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 15px;
+            }
+
+            .header-left {
+                justify-content: center;
+                gap: 15px;
+            }
+
+            .divider {
+                display: none;
+            }
+
+            .new-harvest-btn {
+                align-self: center;
+                padding: 15px 30px;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            .table {
+                min-width: 700px;
+            }
+
+            .table-header th,
+            .table-body td {
+                padding: 15px 10px;
+                font-size: 14px;
+            }
+
+            .status-badge {
+                min-width: 100px;
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .summary-cards {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .summary-card {
+                padding: 20px;
+            }
+
+            .summary-value {
+                font-size: 36px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 70px 15px 15px;
+            }
+
+            .table-header th,
+            .table-body td {
+                padding: 12px 8px;
+                font-size: 12px;
+            }
+
+            .summary-value {
+                font-size: 28px;
+            }
+
+            .summary-label {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
+    
+    <div class="overlay" onclick="closeMobileMenu()"></div>
+    
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="logo">
+                <div class="logo-circle">🌿</div>
+                <div class="logo-text">perfil</div>
+                <div class="logo-subtitle">Produtores Rural</div>
+            </div>
+            
+            <nav class="nav-menu">
+                <div class="nav-item">Página Inicial</div>
+                <div class="nav-item active">Safras</div>
+                <div class="nav-item">Estoque</div>
+                <div class="nav-item">Faturamento</div>
+            </nav>
+            
+            <div class="weather">
+                <div class="weather-icon">☁️</div>
+                <div>clima</div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <div class="header-left">
+                    <h1 class="page-title">Safras</h1>
+                    <div class="divider"></div>
+                    <div class="year-selector" onclick="toggleYearDropdown()">
+                        2025 <span>▼</span>
+                    </div>
+                </div>
+                <button class="new-harvest-btn" onclick="addNewHarvest()">
+                    + nova safra
+                </button>
+            </div>
+
+            <!-- Table -->
+            <div class="table-container">
+                <table class="table">
+                    <thead class="table-header">
+                        <tr>
+                            <th>Safra</th>
+                            <th>Cultura</th>
+                            <th>Início</th>
+                            <th>Término</th>
+                            <th>Status</th>
+                            <th>Área(ha)</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-body">
+                        <tr>
+                            <td>Milho 2025</td>
+                            <td>Milho</td>
+                            <td>10/06/25</td>
+                            <td>10/09/25</td>
+                            <td><span class="status-badge status-concluida">Concluída</span></td>
+                            <td>55</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="action-btn edit-btn" onclick="editHarvest(1)">✏️</button>
+                                    <button class="action-btn delete-btn" onclick="deleteHarvest(1)">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Milho 2025</td>
+                            <td>Milho</td>
+                            <td>10/06/25</td>
+                            <td>10/09/25</td>
+                            <td><span class="status-badge status-andamento">Em andamento</span></td>
+                            <td>55</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="action-btn edit-btn" onclick="editHarvest(2)">✏️</button>
+                                    <button class="action-btn delete-btn" onclick="deleteHarvest(2)">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Milho 2025</td>
+                            <td>Milho</td>
+                            <td>10/06/25</td>
+                            <td>10/09/25</td>
+                            <td><span class="status-badge status-encerrada">Encerrada</span></td>
+                            <td>55</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="action-btn edit-btn" onclick="editHarvest(3)">✏️</button>
+                                    <button class="action-btn delete-btn" onclick="deleteHarvest(3)">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Milho 2025</td>
+                            <td>Milho</td>
+                            <td>10/06/25</td>
+                            <td>10/09/25</td>
+                            <td><span class="status-badge status-encerrada">Encerrada</span></td>
+                            <td>55</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="action-btn edit-btn" onclick="editHarvest(4)">✏️</button>
+                                    <button class="action-btn delete-btn" onclick="deleteHarvest(4)">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <div class="summary-value">26°C</div>
+                    <div class="summary-label">Temperatura</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-value">320 ha</div>
+                    <div class="summary-label">Total Hectares</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-value">3</div>
+                    <div class="summary-label">Safras Ativas</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.overlay');
+            
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        function closeMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.overlay');
+            
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        }
+
+        function toggleYearDropdown() {
+            alert('Dropdown de anos - funcionalidade a ser implementada');
+        }
+
+        function addNewHarvest() {
+            alert('Adicionar nova safra - funcionalidade a ser implementada');
+        }
+
+        function editHarvest(id) {
+            alert(`Editar safra ${id} - funcionalidade a ser implementada`);
+        }
+
+        function deleteHarvest(id) {
+            if (confirm(`Tem certeza que deseja excluir a safra ${id}?`)) {
+                alert(`Safra ${id} excluída - funcionalidade a ser implementada`);
+            }
+        }
+
+        // Add hover effects to navigation items
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Close mobile menu after selection
+                if (window.innerWidth <= 768) {
+                    closeMobileMenu();
+                }
+            });
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const toggle = document.querySelector('.mobile-menu-toggle');
+            
+            if (window.innerWidth <= 768 && 
+                !sidebar.contains(event.target) && 
+                !toggle.contains(event.target) && 
+                sidebar.classList.contains('active')) {
+                closeMobileMenu();
+            }
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                closeMobileMenu();
+            }
+        });
+    </script>
+</body>
+</html>
