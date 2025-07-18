@@ -14,19 +14,15 @@ $url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $url = str_replace('/curso-mvc-mysql/App/', '', $url);
 
 // Para debug - você pode remover depois
-echo "URL processada: " . $url . "<br>";
-
+var_dump($url);
 switch ($url) {
     case '':
     case 'home':
         echo "home page";
-        break;
     case 'aluno':
         AlunoController::listar();
-        break;
     case 'aluno/cadastrar':
         AlunoController::cadastrar();
-        break;
     default:
         echo "Página não encontrada - 404";
         break;
