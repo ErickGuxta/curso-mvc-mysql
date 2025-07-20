@@ -25,7 +25,6 @@ spl_autoload_register(function ($nome_da_classe) {
     if(file_exists($arquivo))
     {
         include $arquivo;
-
     } else{
         throw new Exception("Arquivo não encontrado");
     }

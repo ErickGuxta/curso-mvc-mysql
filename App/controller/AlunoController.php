@@ -12,21 +12,32 @@ class AlunoController
     public static function cadastrar()
     {
 
-        $model = new Aluno;
-        // $model->id=8;
-        $model->nome= 'erick';
-        $model->ra= 123;
-        $model->curso= 'Desenvolvimento de Sistemas';
-        $model->save();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $model = new Aluno;
+            $model->Id = !empty($_POST['id']) ? $_POST['id'] : null; //se for nulo ele vai fazer um update
+            $model->Nome = $_POST['nome'];
+            $model->Ra = $_POST['ra'];
+            $model->Curso = $_POST['curso'];
+            $model->save();
 
-        echo "ALUNO INSERIDO NO SISTEMA";
+            header("Location: /curso-mvc-mysql/App/aluno");
+        } else {
+            $model = new Aluno();
+
+            if(isset($_GET['id']))
+            {
+                $model = $model->getById((int) $_GET['id']);
+            }
+            include VIEWS . '/Aluno/form_aluno.php';
+        }
     }
 
     public static function listar()
     {
-        echo "Listagem de alunos";
+        // echo "Listagem de alunos";
         $aluno = new Aluno();
-        $lista = $aluno -> getAllRows();
-        var_dump($lista);
+        $lista = $aluno->getAllRows();
+
+        include VIEWS . '/Aluno/lista_aluno.php';
     }
 }

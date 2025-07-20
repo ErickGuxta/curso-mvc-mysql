@@ -21,7 +21,7 @@ class AlunoDAO extends DAO
     // $model é um objeto Aluno, então mostra todos os métodos e propriedades disponíveis.
     public function save(Aluno $model) : Aluno
     {
-        return ($model->id == null) ? $this->insert($model) : $this->update($model);
+        return ($model->Id == null) ? $this->insert($model) : $this->update($model);
     }
     public function insert(Aluno $model) : Aluno
     {
@@ -29,13 +29,13 @@ class AlunoDAO extends DAO
 
         $stmt = parent::$conexao->prepare($sql);
         // o bindValue substitui as interrogações pelos valores
-        $stmt->bindValue(1, $model->nome);
-        $stmt->bindValue(2, $model->ra);
-        $stmt->bindValue(3, $model->curso);
+        $stmt->bindValue(1, $model->Nome);
+        $stmt->bindValue(2, $model->Ra);
+        $stmt->bindValue(3, $model->Curso);
         // salva no banco de dados
         $stmt->execute();
         // pego a id gerada do aluno na coneão e coloco na prodiedade $model e retorno o $model no final
-        $model->id = parent::$conexao->lastInsertId();
+        $model->Id = parent::$conexao->lastInsertId();
 
         return $model;
     }
@@ -45,21 +45,21 @@ class AlunoDAO extends DAO
 
         $stmt = parent::$conexao->prepare($sql);
         // o bindValue substitui as interrogações pelos valores
-        $stmt->bindValue(1, $model->nome);
-        $stmt->bindValue(2, $model->ra);
-        $stmt->bindValue(3, $model->curso);
-        $stmt->bindValue(4, $model->id);
+        $stmt->bindValue(1, $model->Nome);
+        $stmt->bindValue(2, $model->Ra);
+        $stmt->bindValue(3, $model->Curso);
+        $stmt->bindValue(4, $model->Id);
         // salva no banco de dados
         $stmt->execute();
 
         return $model;
     }
-    public function selectById(int $id) : ?Aluno
+    public function selectById(int $Id) : ?Aluno
     {
         $sql = "SELECT * FROM aluno WHERE id=? ";
 
         $stmt = parent::$conexao->prepare($sql);  
-        $stmt->bindValue(1, $id);
+        $stmt->bindValue(1, $Id);
         $stmt->execute();
 
         return $stmt->fetchObject("App\Model\Aluno");
@@ -74,12 +74,12 @@ class AlunoDAO extends DAO
         return $stmt->fetchAll(DAO::FETCH_CLASS, "App\Model\Aluno");
     }
 
-    public function delete(int $id) :bool
+    public function delete(int $Id) :bool
     {
         $sql = "DELETE FROM aluno WHERE id=?";
 
         $stmt = parent::$conexao->prepare($sql);  
-        $stmt->bindValue(1, $id);
+        $stmt->bindValue(1, $Id);
         return $stmt->execute();
     }
     

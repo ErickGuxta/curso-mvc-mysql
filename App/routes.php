@@ -2,7 +2,11 @@
 
 // observação: App\Controller é o nome do meu namespace
 //instanciando classe
-use App\Controller\AlunoController;
+use App\Controller\{
+    AlunoController,
+    IncialController,
+    InicialController
+};
 
 /* Para saber mais sobre a função 
  * parse_url: https://www.php.net/manual/pt_BR/function.parse-url.php
@@ -20,7 +24,7 @@ $url = trim($url, '/');
 switch ($url) {
     case '':
     case 'home':
-        echo "home page";
+        InicialController::index();
         break;
     case 'aluno':
         AlunoController::listar();

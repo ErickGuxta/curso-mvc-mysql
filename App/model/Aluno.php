@@ -5,7 +5,7 @@ use App\DAO\AlunoDAO;
 
 class Aluno
 {
-    public $id, $nome, $ra, $curso;
+    public $Id, $Nome, $Ra, $Curso;
 
      
     function save() : Aluno // : tipo_variavel
@@ -14,9 +14,9 @@ class Aluno
         return (new AlunoDAO()) -> save($this);
     }
 
-    function getById(int $id) : ?Aluno
+    function getById(int $Id) : ?Aluno
     {
-        return (new AlunoDAO()) -> selectById($id);
+        return (new AlunoDAO()) -> selectById($Id);
     }
 
     function getAllRows() :array
@@ -24,9 +24,9 @@ class Aluno
         return (new AlunoDAO()) -> select();
     }
 
-    function delete(int $id) : bool
+    function delete(int $Id) : bool
     {
-        return (new AlunoDAO()) -> delete($id);
+        return (new AlunoDAO()) -> delete($Id);
     }
 
 }

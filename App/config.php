@@ -6,7 +6,8 @@
 
 // vou criar contantes para definir um caminho
 define('BASE_DIR', dirname(__FILE__, 2));
-define('VIEWS', BASE_DIR . '/view'); // Corrigido: removido o ponto extra
+define('VIEWS', BASE_DIR . '/App/view/'); // Corrigido: removido o ponto extra
+define('INCLUDES', VIEWS . 'Includes/'); // Corrigido: removido o ponto extra
 
 // conectando com BD 
 // OBSERVAÇÂO $_ENV não é muito bom, pois fica disponivel na aplicação toda
