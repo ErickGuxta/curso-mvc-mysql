@@ -11,20 +11,22 @@ class AlunoController
 {
     public static function cadastrar()
     {
-        // echo "vou mostrar o formulario a depender...";
 
         $model = new Aluno;
-        $model->id=8;
+        // $model->id=8;
         $model->nome= 'erick';
-        $model->ra= 'teste';
-        $model->curso= 'Informatica';
+        $model->ra= 123;
+        $model->curso= 'Desenvolvimento de Sistemas';
         $model->save();
+
+        echo "ALUNO INSERIDO NO SISTEMA";
     }
 
     public static function listar()
     {
         echo "Listagem de alunos";
         $aluno = new Aluno();
-        $aluno -> getAllRows();
+        $lista = $aluno -> getAllRows();
+        var_dump($lista);
     }
 }

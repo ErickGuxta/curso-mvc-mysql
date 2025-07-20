@@ -16,17 +16,17 @@ class Aluno
 
     function getById(int $id) : ?Aluno
     {
-        return new Aluno();
+        return (new AlunoDAO()) -> selectById($id);
     }
 
     function getAllRows() :array
     {
-        return [];
+        return (new AlunoDAO()) -> select();
     }
 
     function delete(int $id) : bool
     {
-        return false;
+        return (new AlunoDAO()) -> delete($id);
     }
 
 }

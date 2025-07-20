@@ -2,7 +2,7 @@
 // Aqui dentro vai ficar a classe que vai conctar com o banco
 // VAi ser a classe mae da classe AlunoDAO
 
-namespace App\dao;
+namespace App\DAO;
 
 // PDO encapsula o acesso para diversos tipos de banco de dados
 use PDO;
@@ -14,10 +14,14 @@ abstract class DAO extends PDO
     public function __construct()
     {
         // data sorce name
-        $dsn = "mysql:host=" . $_ENV['db']['host'] . "dbname=" . $_ENV['db']['database'];
+        $dsn = "mysql:host=" . $_ENV['db']['host'] . ";dbname=" . $_ENV['db']['database'];
 
         if (self::$conexao == null) 
         {
+            /**
+             * Criando a conexão e armazenado na propriedade definida para tal.
+             * O que é PDO: https://www.php.net/manual/pt_BR/intro.pdo.php
+             */ 
             self::$conexao = new PDO(
                 $dsn,
                 $_ENV['db']['user'],
