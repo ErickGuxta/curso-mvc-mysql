@@ -32,6 +32,9 @@ switch ($url) {
     case 'aluno/cadastrar':
         AlunoController::cadastrar();
         break;
+    case 'aluno/excluir':
+        AlunoController::delete();
+        break;
     default:
         echo "Página não encontrada - 404";
         break;

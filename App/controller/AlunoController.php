@@ -34,10 +34,17 @@ class AlunoController
 
     public static function listar()
     {
-        // echo "Listagem de alunos";
         $aluno = new Aluno();
         $lista = $aluno->getAllRows();
 
         include VIEWS . '/Aluno/lista_aluno.php';
+    }
+    public static function delete()
+    {
+        $aluno = new Aluno();
+
+        $aluno ->delete((int) $_GET['id']);
+        
+        header("Location: /curso-mvc-mysql/App/aluno");
     }
 }

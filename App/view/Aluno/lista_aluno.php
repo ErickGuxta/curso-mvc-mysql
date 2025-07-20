@@ -28,6 +28,8 @@
                         <a href="/curso-mvc-mysql/App/aluno/cadastrar?id=<?= $aluno->Id?>"><?= $aluno->Nome?></a>  
                     </td>
                     <td> <?= $aluno->Curso?> </td>
+                    <td><a href="/curso-mvc-mysql/App/aluno/excluir?id=<?= $aluno->Id?>">🗑️Remover</a></td>
+
                 </tr>
                 <?php endforeach ?>
 
