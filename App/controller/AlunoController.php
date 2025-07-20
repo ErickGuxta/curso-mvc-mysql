@@ -11,7 +11,14 @@ class AlunoController
 {
     public static function cadastrar()
     {
-        echo "vou mostrar o formulario a depender...";
+        // echo "vou mostrar o formulario a depender...";
+
+        $model = new Aluno;
+        $model->id=8;
+        $model->nome= 'erick';
+        $model->ra= 'teste';
+        $model->curso= 'Informatica';
+        $model->save();
     }
 
     public static function listar()

@@ -10,7 +10,7 @@ define('VIEWS', BASE_DIR . '/view'); // Corrigido: removido o ponto extra
 
 // conectando com BD 
 // OBSERVAÇÂO $_ENV não é muito bom, pois fica disponivel na aplicação toda
-$_ENV['db']['host'] = "localhost";
+$_ENV['db']['host'] = "localhost:3307";
 $_ENV['db']['user'] = "root";
 $_ENV['db']['pass'] = "Erick*2025";
 $_ENV['db']['database'] = "biblioteca";

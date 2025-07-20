@@ -13,16 +13,21 @@ $url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 // Remove a base path do projeto para facilitar o roteamento
 $url = str_replace('/curso-mvc-mysql/App/', '', $url);
 
-// Para debug - você pode remover depois
-var_dump($url);
+// Remove barras extras no início e fim
+$url = trim($url, '/');
+
+
 switch ($url) {
     case '':
     case 'home':
         echo "home page";
+        break;
     case 'aluno':
         AlunoController::listar();
+        break;
     case 'aluno/cadastrar':
         AlunoController::cadastrar();
+        break;
     default:
         echo "Página não encontrada - 404";
         break;
